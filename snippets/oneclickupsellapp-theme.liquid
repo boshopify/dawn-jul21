@@ -1,5 +1,5 @@
 {% comment %}
-  Updated: 2021/06/16
+  Updated: 2021/08/02
 {% endcomment %}
 
 {% unless oneclickupsellapp %}
@@ -572,7 +572,7 @@ PopupDispatcher.prototype = {
     },
 
     _isAddAction: function(el) {
-        return /cart\/add/.test(el.action);
+        return el && /cart\/add/.test(el.action);
     },
 
     _variantWasTrigger: function(id) {
@@ -605,7 +605,9 @@ PopupDispatcher.prototype = {
     },
 
     get popupAccepted() {
-        return utils.cookie.get('cart') === utils.cookie.get('ocu_popup_token') && !!utils.cookie.get('ocu_accepted');
+        return OCUIncart.settings.popup_frequency === 'accept_or_decline'
+            && utils.cookie.get('cart') === utils.cookie.get('ocu_popup_token')
+            && !!utils.cookie.get('ocu_accepted');
     },
 
     get targetAction() {

@@ -75,7 +75,7 @@
           {% comment %} Bundle component block {% endcomment %}
             {% when 'bundle_component_select' %}
               <div class="bundle-component-select" {{ block.shopify_attributes }}>
-                {{ block.settings.bundle_component_product.featured_image | img_url: 'medium' | img_tag }}
+                {{ block.settings.bundle_component_product.featured_image | img_url: 'small' | img_tag }}
                 <p>{{ block.settings.bundle_component_product.title }}</p>
               </div>
           {%- when '@app' -%}

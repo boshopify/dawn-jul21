@@ -412,6 +412,19 @@
       </div>
     </modal-dialog>
   {%- endfor -%}
+  
+  
+  {% comment %} Bundle component block {% endcomment %}
+  {% for block in section.blocks %}
+    {% case block.type %}
+      {% when 'bundle_component_select' %}
+        <div class="bundle-component-select" {{ block.shopify_attributes }}>
+          {{ block.settings.image | img_url: '2048x' | img_tag }}
+        </div>
+    {% endcase %}
+  {% endfor %}
+  
+  
 </section>
 
 {% javascript %}

@@ -72,6 +72,12 @@
 
         {%- for block in section.blocks -%}
           {%- case block.type -%}
+          {% comment %} Bundle component block {% endcomment %}
+            {% when 'bundle_component_select' %}
+              <div class="bundle-component-select" {{ block.shopify_attributes }}>
+                {{ block.settings.featured_image | img_url: 'medium' | img_tag }}
+                <p>{{ block.settings.title }}</p>
+              </div>
           {%- when '@app' -%}
             {% render block %}
           {%- when 'text' -%}
@@ -412,19 +418,6 @@
       </div>
     </modal-dialog>
   {%- endfor -%}
-  
-  
-  {% comment %} Bundle component block {% endcomment %}
-  {% for block in section.blocks %}
-    {% case block.type %}
-      {% when 'bundle_component_select' %}
-        <div class="bundle-component-select" {{ block.shopify_attributes }}>
-          {{ block.settings.image | img_url: '2048x' | img_tag }}
-        </div>
-    {% endcase %}
-  {% endfor %}
-  
-  
 </section>
 
 {% javascript %}

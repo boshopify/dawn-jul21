@@ -74,10 +74,12 @@
           {%- case block.type -%}
           {% comment %} Bundle component block {% endcomment %}
             {% when 'bundle_component_select' %}
-              <div class="bundle-component-select" {{ block.shopify_attributes }}>
-                {{ block.settings.bundle_component_product.featured_image | img_url: 'small' | img_tag }}
-                <p>{{ block.settings.bundle_component_product.title }}</p>
-              </div>
+        	  {% if block.settings.bundle_component_product %}
+                <div class="bundle-component-select" {{ block.shopify_attributes }}>
+                  {{ block.settings.bundle_component_product.featured_image | img_url: 'small' | img_tag }}
+                  <p>{{ block.settings.bundle_component_product.title }}</p>
+                </div>
+        	  {% endif %}
           {%- when '@app' -%}
             {% render block %}
           {%- when 'text' -%}

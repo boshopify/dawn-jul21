@@ -503,7 +503,7 @@ PopupDispatcher.prototype = {
     productLocation: function(event, target) {
         const variantId = this._formVariantId(target);
         if(this.popupAccepted) return this.context.helpers.clearFallback();
-        if (!this._variantWasTrigger(variantId)) return this.breakHandling(event, target); // exit handling if product not trigger
+        if (!this._variantWasTrigger(variantId) && !this._productWasTrigger()) return this.breakHandling(event, target); // exit handling if product not trigger
 
         this.context.prevent(event);
         target.disabled = true;
@@ -579,6 +579,12 @@ PopupDispatcher.prototype = {
         const funnels = OCUIncart.funnels;
         if (funnels.triggers.all) return true;
         return !!~funnels.triggers.variants.indexOf(id);
+    },
+
+    _productWasTrigger: function() {
+        const triggers = OCUIncart.funnels.triggers;
+        if (triggers.all) return true;
+        return !!~triggers.products.indexOf(lqd.product.id);
     },
 
     _formVariantId: function(target) {

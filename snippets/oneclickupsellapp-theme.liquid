@@ -1,5 +1,5 @@
 {% comment %}
-  Updated: 2021/08/02
+  Updated: 2021/08/25
 {% endcomment %}
 
 {% unless oneclickupsellapp %}
@@ -459,18 +459,22 @@ PopupDispatcher.prototype = {
 
         return this.getIncartConfig(data)
             .then(function(response) {
-                const type = response.data.type;
+                const kind = response.data.kind;
                 precheckoutConfig.config = response.data;
                 self.utils.beforePrecheckoutPopup();
                 utils.store.set('isTargetBuyNow', self.helpers.isBuyNow(event));
-                if (type === 'representation') return OCUIncart.multipleUpsells.setData(precheckoutConfig);
-                return OCUPrecheckout(precheckoutConfig);
+                return OCUIncart[kind + 'Upsells'].setData(precheckoutConfig);
             })
             .catch(this.checkout.bind(this));
     },
 
     getIncartConfig: function(data) {
-        let query = '/offers/incart?';
+        let query = '/pre_purchase/v1/checkout_offers/appropriate?';
+        const endpoint = window.OCUIncart && OCUIncart.appEndpoint;
+        const headers = {
+            'Content-Type': 'application/json',
+            'Shop-Domain': lqd.permanent_domain
+        };
         const self = this.context;
         const isSameCart = self.helpers.isSameCart(lqd.cart);
         const isSameCartToken = self.helpers.isSameCartToken(lqd.cart);
@@ -482,7 +486,7 @@ PopupDispatcher.prototype = {
 
         const payload = this._incartPayload(data);
 
-        return axios.post(window.OCUIncart.proxy_url + query, payload);
+        return axios.post(endpoint + query, payload, { headers: headers });
     },
 
     checkout: function(error) {
@@ -730,6 +734,11 @@ window.OCUIncart = {
     get proxy_url() {
         return this.metafields.proxy_url;
     },
+
+    get appEndpoint() {
+        return this.metafields.settings.app_endpoint;
+    },
+
     get popup_location() {
         return this.metafields.general.settings.popup_locations;
     },
@@ -809,7 +818,7 @@ utils.shareableDiscount({ clear:false });
 
 if (lqd.is_precheckout) requireOptionSelectors();
 
-var ocuCdn="https://d1u9wuqimc88kc.cloudfront.net";!function(){var e;e=utils.store.get("fallback").timeout,o=setTimeout(d.bind(null,!0),e),d(!1);var c="https://d16i0l5qhf2h7o.cloudfront.net",n=document.createElement("script"),l=document.createElement("link"),o=null;var t=document.createElement("script");function u(e,t){e.onload=function(){d(!0),clearTimeout(o)},t.rel="stylesheet",document.head.appendChild(e),document.head.appendChild(t)}function d(t){var e=document.querySelectorAll(utils.store.get("ocuSelectors"));Array.prototype.forEach.call(e,function(e){e.disabled=!t})}t.src="https://zipify-ocu.s3.amazonaws.com/oneclickupsell/production/deploy/assets/"+lqd.path+"/build_number.js?ts="+Date.now(),t.onload=function(){var e=window.OCU_assets_build_number,t=c+"/"+lqd.path+"/assets."+e+".js",o=document.createElement("script");document.head.appendChild(o),o.src=t,o.onload=function(e){var t=window.ocu_precheckout_assets;n.src=t["precheckout.js"],l.href=t["precheckout.css"],u(n,l)}},document.head.appendChild(t)}();
+var ocuCdn="https://d1u9wuqimc88kc.cloudfront.net";
 function Application() {
     ajax = axios.create({ timeout: 8000 });
     ajax.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -899,8 +908,8 @@ Application.prototype = {
             const form = document.querySelector('form[action$="/cart/add"]');
             return form.submit();
         }
-
-        if (window.OCUPrecheckout) {
+        const anyPrePurchases = window.OCUIncart && (OCUIncart.singleUpsells || OCUIncart.multipleUpsells);
+        if (anyPrePurchases) {
             // self.prevent(event, true);
             return this.popupDispatcher.proceed(event, target, self);
         }
@@ -2437,9 +2446,13 @@ function PublicMethod() {
     }
 
     this._verify = function() {
-        const url = '/pre_purchase/verify';
-
-        return axios.post(window.OCUIncart.proxy_url + url, this._verifyPayload());
+        const url = '/pre_purchase/v1/draft_orders/verify';
+        const endpoint = window.OCUIncart && OCUIncart.appEndpoint;
+        const headers = {
+            'Content-Type': 'application/json',
+            'Shop-Domain': lqd.permanent_domain
+        };
+        return axios.post(endpoint + url, this._verifyPayload(), { headers: headers });
     }
 
     this._verifyPayload = function() {

@@ -83,6 +83,19 @@
                   <p>{{ bundle_component_product.title }}</p>
                 </div>
         		
+        		{% comment %} Render subscription data (if any) {% endcomment %}
+        		{%- liquid
+                	assign current_variant = bundle_component_product.selected_or_first_available_variant 
+                	assign current_selling_plan_allocation = current_variant.selected_selling_plan_allocation
+                     if current_selling_plan_allocation == nil
+                      assign current_selling_plan_allocation = current_variant.selling_plan_allocations | first
+                     endif
+                -%}
+        		{% if current_selling_plan_allocation.selling_plan %}
+                    	
+                {% endif %}
+        			
+        
         	  {% endif %}
        		{% comment %} END of Custom Code for bundle component block {% endcomment %}
           

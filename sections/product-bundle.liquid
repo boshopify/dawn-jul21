@@ -92,7 +92,8 @@
                      endif
                 -%}
         		{% if current_selling_plan_allocation.selling_plan %}
-                    	
+        			{% assign current_selling_plan = current_selling_plan_allocation.selling_plan %}
+        			<p>{{ current_selling_plan.id }}</p>
                 {% endif %}
         			
         

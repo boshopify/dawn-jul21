@@ -72,17 +72,21 @@
 
         {%- for block in section.blocks -%}
           {%- case block.type -%}
-          	{% comment %} Start of custom code for bundle component block {% endcomment %}
+          	
+        	
+        	{% comment %} Start of custom code for bundle component block {% endcomment %}
             {% when 'bundle_component_select' %}
         	  {% if block.settings.bundle_component_product %}
-        
-        		
+        		{% assign bundle_coponent_product = block.settings.bundle_component_product %}
                 <div class="bundle-component-select" {{ block.shopify_attributes }}>
-                  {{ block.settings.bundle_component_product.featured_image | img_url: 'small' | img_tag }}
-                  <p>{{ block.settings.bundle_component_product.title }}</p>
+                  {{ bundle_component_product.featured_image | img_url: 'small' | img_tag }}
+                  <p>{{ bundle_component_product.title }}</p>
                 </div>
+        		
         	  {% endif %}
        		{% comment %} END of Custom Code for bundle component block {% endcomment %}
+          
+        
           {%- when '@app' -%}
             {% render block %}
           {%- when 'text' -%}

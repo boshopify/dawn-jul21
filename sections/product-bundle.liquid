@@ -77,7 +77,7 @@
         	{% comment %} Start of custom code for bundle component block {% endcomment %}
             {% when 'bundle_component_select' %}
         	  {% if block.settings.bundle_component_product %}
-        		{% assign bundle_coponent_product = block.settings.bundle_component_product %}
+        		{% assign bundle_component_product = block.settings.bundle_component_product %}
                 <div class="bundle-component-select" {{ block.shopify_attributes }}>
                   {{ bundle_component_product.featured_image | img_url: 'small' | img_tag }}
                   <p>{{ bundle_component_product.title }}</p>

@@ -5,9 +5,7 @@
           class="product-form__submit button button--full-width button--primary">  
     {{ 'products.product.add_to_cart' | t }}
   </button>
-  {%- if block.settings.show_dynamic_checkout -%}
   {{ form | payment_button }}
-  {%- endif -%}
 </div>
 
 <script>

@@ -50,12 +50,6 @@
             "picker_type": "button"
           }
         },
-        "buy_buttons": {
-          "type": "buy_buttons",
-          "settings": {
-            "show_dynamic_checkout": true
-          }
-        },
         "description": {
           "type": "description",
           "settings": {
@@ -76,7 +70,6 @@
         "5b32fd6d-e1f7-44f6-9e29-19f3cedd8ab9",
         "34014e75-95aa-46a1-8af6-9ce2cfe6a506",
         "variant_picker",
-        "buy_buttons",
         "description",
         "share"
       ],
